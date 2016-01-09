@@ -6,5 +6,5 @@
   DEBUG=blog:* npm start  
 
 # 还存在尚未弄懂的问题  
-1.express各命令参数
+1.express各命令参数  
 2.
