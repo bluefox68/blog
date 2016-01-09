@@ -30,7 +30,6 @@ User.prototype.save = function(callback){
 				if (err) {
 					return callback(err);
 				};
-				console.log("user11:"+JSON.stringify(user));
 				callback(null,user);
 			});
 		});
