@@ -133,7 +133,8 @@ router.get('/post', function(req, res, next) {
   });
 });
 router.post('/post', function(req, res, next) {
-	var currentUser = req.session.user,
+	console.log("----------------user:"+JSON.stringify(req.session.user));
+	var currentUser = req.session.user.ops[0],
 			post = new Post(currentUser.name,req.body.title,req.body.post);
 
 	post.save(function(err){

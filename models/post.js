@@ -1,4 +1,5 @@
 var mongodb = require("./db");
+var markdown = require("markdown").markdown;
 
 function Post(name,title,post){
 	this.name = name;
@@ -31,7 +32,7 @@ Post.prototype.save = function(callback){
 				mongodb.close();
 				return callback(err);
 			};
-			console.log("post11:"+JSON.stringify(post));
+			
 			collection.insert(post,{
 				safe : true
 			},function(err){
@@ -66,6 +67,9 @@ Post.get = function(name,callback){
 				if (err) {
 					return callback(err);
 				};
+				docs.forEach(function(doc){
+					doc.post = markdown.toHTML(doc.post);
+				});
 				callback(null,docs);
 			});
 		});
