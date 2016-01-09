@@ -3,7 +3,22 @@ var router = express.Router();
 var crypto = require('crypto');
 var	User = require("../models/user");
 
-/* GET home page. */
+var checkLogin = function(req,res,next){//对于需要登录查看的页面需要检查是否登录
+	if(!req.session.user){
+		req.flash('error',"未登录！");
+		res.redirect("/login");
+	}
+	next();
+}
+
+var checkNotLogin = function(req,res,next){//对于不需要登录的页面需要检查是否不登录
+	if(req.session.user){
+		req.flash('error',"已登录！");
+		res.redirect("back");
+	}
+	next();
+}
+
 router.get('/', function(req, res, next) {
   res.render('index',{
   	title: '首页',
@@ -13,6 +28,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/reg',checkNotLogin);
 router.get('/reg', function(req, res, next) {
   res.render('register',{ 
   	title: '注册',
@@ -20,6 +36,7 @@ router.get('/reg', function(req, res, next) {
   	error:req.flash("error").toString()
   });
 });
+
 
 router.post('/reg', function(req, res, next) {
   var name  = req.body.name,
@@ -64,7 +81,7 @@ router.post('/reg', function(req, res, next) {
 	});
 });
 
-
+router.get('/login',checkNotLogin);
 router.get('/login', function(req, res, next) {
   res.render('login', { 
   	title: '登录',
@@ -97,6 +114,7 @@ router.post('/login', function(req, res, next) {
 
 });
 
+router.get('/post',checkLogin);
 router.get('/post', function(req, res, next) {
   res.render('post', { 
   	title: '发表',
@@ -108,6 +126,7 @@ router.post('/post', function(req, res, next) {
 	
 });
 
+router.get('/loginout',checkLogin);
 router.get('/loginout', function(req, res, next) {
 	req.session.user = null;
 	req.flash("success","退出成功");
