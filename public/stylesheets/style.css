@@ -6,3 +6,5 @@ body {
 a {
   color: #00B7FF;
 }
+
+.boundary{border-bottom: 2px solid #ccc}

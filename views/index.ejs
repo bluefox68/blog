@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
+  <% include head %>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  	<div class="container-fluid">
+  		<div class="row ">
+	  		<div class="col-md-2"></div>
+			  <h1 class="col-md-10 boundary">主页</h1>
+			</div>
+	    <div class="row">
+			  <div class="col-md-2">
+			  	<% include leftBar %>
+			  </div>
+			  <div class="col-md-10">
+			  	这是主页
+			  </div>
+			</div>
+		</div>
   </body>
 </html>

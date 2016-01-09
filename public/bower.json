@@ -1,0 +1,21 @@
+{
+  "name": "blog",
+  "description": "",
+  "main": "gulpfile.js",
+  "authors": [
+    "bluefox68<1132761957@qq.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/bluefox68/blog",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6"
+  }
+}
