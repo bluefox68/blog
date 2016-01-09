@@ -4,12 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var sesstion = require('express-session');//生成会话
+var MongoStore = require('connect-mongo')(sesstion);//用来将会话信息存储到mongodb中
+var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var settings = require('./settings');
-var sesstion = require('./express-sesstion');//生成会话
-var MongoStore = require('./connect-mongo');//用来将会话信息存储到mongodb中
 
 var app = express();
 
@@ -25,15 +26,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(sesstion({
-  secret:settings.cookieSecret,
-  key:settings.db,
-  cookie:{maxAge:1000*60*60*24*30},
-  store:new MongoStore({
+  saveUninitialized : false,
+  resave : true,
+  secret : settings.cookieSecret,
+  key : settings.db,
+  cookie : { 
+    maxAge:1000*60*60*24*30
+  },
+  store : new MongoStore({
     db:settings.db,
     host:settings.host,
     port:settings.port
   })
-}))
+}));
+app.use(flash());
 
 app.use('/', routes);
 app.use('/users', users);
@@ -68,6 +74,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
+app.listen()
 module.exports = app;

@@ -1,20 +1,25 @@
-<!DOCTYPE html>
-<html>
-  <% include head %>
-  <body>
-  	<div class="container-fluid">
-  		<div class="row ">
-	  		<div class="col-md-2"></div>
-			  <h1 class="col-md-10 boundary">主页</h1>
-			</div>
-	    <div class="row">
-			  <div class="col-md-2">
-			  	<% include leftBar %>
-			  </div>
-			  <div class="col-md-10">
-			  	这是主页
-			  </div>
-			</div>
-		</div>
-  </body>
-</html>
+<% include header %>
+<div class="container-fluid">
+	<div class="row ">
+		<div class="col-md-2"></div>
+	  <h1 class="col-md-10 boundary">主页</h1>
+	</div>
+	<div class="row">
+	  <div class="col-md-2">
+	  	<% include leftBar %>
+	  </div>
+	  <div class="col-md-10">
+	  	<% if(success){ %>
+	  	  22
+	  		<%= success %>
+	  	<% }else if(error){ %>
+	  	  111
+	  		<%= error %>
+	  	<% }else{ %>
+	  		这是主页
+	  	<% } %>
+	  </div>
+	</div>
+</div>
+<% include footer %>
+  

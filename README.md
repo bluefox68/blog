@@ -5,6 +5,13 @@
   npm install  
   DEBUG=blog:* npm start  
 
+# 查看端口号被占用并杀掉占用的进程的方法
+
+## mac
+  查看：sudo lsof -i :port
+  杀：sudo kill -9 PID
+
+
 # 还存在尚未弄懂的问题  
 1.express各命令参数  
 2.
