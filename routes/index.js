@@ -6,7 +6,7 @@ var	User = require("../models/user");
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index',{
-  	title: '主页',
+  	title: '首页',
   	user:req.session.user,
   	success:req.flash("success").toString(),
   	error:req.flash("error").toString()
@@ -15,7 +15,9 @@ router.get('/', function(req, res, next) {
 
 router.get('/reg', function(req, res, next) {
   res.render('register',{ 
-  	title: '注册'
+  	title: '注册',
+  	user:req.session.user,
+  	error:req.flash("error").toString()
   });
 });
 
@@ -26,7 +28,7 @@ router.post('/reg', function(req, res, next) {
 
 	if(password_re != password){
 		req.flash("error","两次输入的密码不一致!");
-		return res.redirect("./reg");
+		return res.redirect("/reg");
 	}
 
 	var md5 = crypto.createHash("md5"),
@@ -34,14 +36,14 @@ router.post('/reg', function(req, res, next) {
 
 	var newUser = new User({
 		name : req.body.name,
-		password : req.body.password,
+		password : password,
 		email : req.body.email
 	});
 
 	User.get(newUser.name,function(err,user){
 		if (err) {
 			req.flash("error",err);
-			return res.redirect("/");
+			return res.redirect("/reg");
 		};
 		if(user) {
 			req.flash("error","用户名已经存在！");
@@ -54,6 +56,8 @@ router.post('/reg', function(req, res, next) {
 			};
 		
 			req.session.user = user;
+
+			console.log("user:"+JSON.stringify(user));
 			req.flash("success","注册成功");
 			res.redirect("/");
 		});
@@ -63,20 +67,41 @@ router.post('/reg', function(req, res, next) {
 
 router.get('/login', function(req, res, next) {
   res.render('login', { 
-  	title: 'Express',
+  	title: '登录',
   	user:req.session.user,
-  	success:req.flash("success").toString(),
   	error:req.flash("error").toString() 
   });
 });
 router.post('/login', function(req, res, next) {
-  
+  var md5 = crypto.createHash("md5"),
+			password = md5.update(req.body.password).digest('hex');
+
+	User.get(req.body.name,function(err,user){
+
+		console.log("user:"+JSON.stringify(user)+":"+password);
+
+		if (!user) {
+			req.flash("error","用户不存在！");
+			return res.redirect("/login");
+		};
+
+		if(user.password != password){
+			req.flash("error","密码错误!");
+			return res.redirect("./login");
+		}
+
+		req.session.user = user;
+		req.flash("success","登录成功");
+		res.redirect("/");
+	});
+
 });
 
 router.get('/post', function(req, res, next) {
   res.render('post', { 
-  	title: 'Express11',
-  	user:req.session.user
+  	title: '发表',
+  	user:req.session.user,
+  	error:req.flash("error").toString() 
   });
 });
 router.post('/post', function(req, res, next) {
@@ -84,7 +109,9 @@ router.post('/post', function(req, res, next) {
 });
 
 router.get('/loginout', function(req, res, next) {
-  res.redirect("/");
+	req.session.user = null;
+	req.flash("success","退出成功");
+	res.redirect("/");
 });
 
 module.exports = router;

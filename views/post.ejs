@@ -6,9 +6,12 @@
 	</div>
   <div class="row">
 	  <div class="col-md-2">
-	  	<% include leftBar %>
+	  	<% include left %>
 	  </div>
 	  <div class="col-md-10">
+	  	<% if(error){ %>
+	  	<%= error %>
+	  	<% } %>
 	  	<form method="post" action="">
 	  		<fieldset class="form-group">
 	  			<label>标题</label>

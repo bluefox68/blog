@@ -1,0 +1,53 @@
+<%
+	var Navigation = {
+		isActiveNavigation : function(title,nav){
+			var html = "";
+			for(var k in nav){
+				if(title==nav[k].text){
+					html += '<li role="presentation" class="active"><a href="'+nav[k].path+'">'+nav[k].text+'</a></li>'
+				}else{
+					html += '<li role="presentation"><a href="'+nav[k].path+'">'+nav[k].text+'</a></li>'
+				}
+			}
+			return html;
+		},
+		render : function(user,title,unlogin,logined){
+			var html = "";
+
+			if(user){
+				html = Navigation.isActiveNavigation(title,logined);
+			}else{
+				html = Navigation.isActiveNavigation(title,unlogin);
+			}
+			return html;
+		}
+	}
+%>
+<%
+	var data = {
+		common : [{
+			path:"/",
+			text:'首页'
+		}],
+		unlogin : [{
+				path:"/reg",
+				text:'注册'
+			},{
+				path:"/login",
+				text:'登录'
+			}
+		],
+		logined : [{
+				path:"/post",
+				text:'发表'
+			},{
+				path:"/loginout",
+				text:'退出'
+			}
+		]
+	}
+%>
+<ul class="nav nav-pills nav-stacked text-right">
+	<%- Navigation.isActiveNavigation(title,data.common) %>
+	<%- Navigation.render(user,title,data.unlogin,data.logined) %>
+</ul>
