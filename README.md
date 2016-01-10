@@ -11,7 +11,6 @@
   查看：sudo lsof -i :port
   杀：sudo kill -9 PID
 
-
 # 还存在尚未弄懂的问题  
 1.express各命令参数  
 2.sublime中最简便的调试nodejs的方法

@@ -3,6 +3,7 @@ var router = express.Router();
 var crypto = require('crypto');
 var	User = require("../models/user");
 var Post = require("../models/post");
+var Comment = require("../models/comment");
 
 var checkLogin = function(req,res,next){//对于需要登录查看的页面需要检查是否登录
 	if(!req.session.user){
@@ -20,12 +21,12 @@ var checkNotLogin = function(req,res,next){//对于不需要登录的页面需�
 	next();
 }
 
+
 router.get('/', function(req, res, next) {
-	Post.get(null,function(err,posts){
+	Post.getAll(null,function(err,posts){
 		if (err) {
 			posts = [];
 		};
-		console.log("success"+":"+req.flash("success").toString()+","+"posts:"+JSON.stringify(posts));
 
 		res.render('index',{
 	  	title : '首页',
@@ -104,8 +105,6 @@ router.post('/login', function(req, res, next) {
 
 	User.get(req.body.name,function(err,user){
 
-		
-
 		if (!user) {
 			req.flash("error","用户不存在！");
 			return res.redirect("/login");
@@ -117,7 +116,6 @@ router.post('/login', function(req, res, next) {
 		}
 
 		req.session.user = user;
-		console.log("user:"+JSON.stringify(user)+":"+password);
 		req.flash("success","登录成功");
 		res.redirect("/");
 	});
@@ -133,7 +131,6 @@ router.get('/post', function(req, res, next) {
   });
 });
 router.post('/post', function(req, res, next) {
-	console.log("----------------user:"+JSON.stringify(req.session.user));
 	var currentUser = req.session.user.ops[0],
 			post = new Post(currentUser.name,req.body.title,req.body.post);
 
@@ -152,6 +149,64 @@ router.get('/loginout', function(req, res, next) {
 	req.session.user = null;
 	req.flash("success","退出成功");
 	res.redirect("/");
+});
+
+router.get('/u/:name', function(req, res, next) {
+	User.get(req.params.name,function(err,user){
+		if (!user) {
+			req.flash('error','用户不存在');
+			return res.redirect("/");
+		};
+		Post.getAll(user.name,function(err,posts){
+			if (err) {
+				req.flash("error",err);
+				return res.redirect("/");
+			};
+			res.render("user",{
+				title : user.name,
+				posts : posts,
+				user : req.session.user,
+				success : req.flash("success").toString(),
+				error : req.flash("error").toString()
+			});
+		});
+	});
+});
+router.get('/u/:name/:day/:title', function(req, res, next) {
+	Post.getOne(req.params.name,req.params.day,req.params.title,function(err,post){
+		if (err) {
+			req.flash("error",err);
+			return res.redirect("/");
+		};
+		res.render("article",{
+			title : req.params.title,
+			post : post,
+			user : req.session.user,
+			success : req.flash("success").toString(),
+			error : req.flash("error").toString()
+		});
+	});
+});
+router.post('/u/:name/:day/:title', function(req, res, next) {
+	var date = new Date(),
+	 		time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
+	
+	var comment = {
+		name : req.body.name,
+		email : req.body.email,
+		website : req.body.website,
+		time : time,
+		content : req.body.content
+	};
+	var newComment = new Comment(req.params.name,req.params.day,req.params.title,comment);
+	newComment.save(function(err){
+		if (err) {
+			req.flash("error",err);
+			return res.redirect("back");
+		};
+		req.flash("sucess","留言成功！");
+		res.redirect("back");
+	});
 });
 
 module.exports = router;
