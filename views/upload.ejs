@@ -9,15 +9,15 @@
 	  	<% include left %>
 	  </div>
 	  <div class="col-md-10">
-	  	<p class="info">
-	  		作者：<a href="/u/<%= post.name %>"><%= post.name %></a> |
-	  		日期：<%= post.time.minute %>
-	  	</p>
-	  	<p><%- post.post %></p>
-	  	<p class="info">阅读：<%= post.pv %> | 评论：<%= post.comments.length %></p>
-	  	<% include comment %>
+	  	<form method="post" action="/upload" enctype="multipart/form-data">
+				<input type="file" name="file1" />
+				<input type="file" name="file2" />
+				<input type="file" name="file3" />
+				<input type="file" name="file4" />
+				<input type="file" name="file5" />
+				<input type="submit" />
+			</form>
 	  </div>
 	</div>
 </div>
-
 <% include footer %>

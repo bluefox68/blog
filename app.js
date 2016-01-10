@@ -3,6 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var multer = require('multer');
 var bodyParser = require('body-parser');
 var sesstion = require('express-session');//生成会话
 var MongoStore = require('connect-mongo')(sesstion);//用来将会话信息存储到mongodb中
@@ -11,6 +12,9 @@ var flash = require('connect-flash');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var settings = require('./settings');
+var fs = require('fs');
+var accessLog = fs.createWriteStream('access.log',{flags:"a"});
+var errorLog = fs.createWriteStream('error.log',{flags:"a"});
 
 var app = express();
 
@@ -21,10 +25,18 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(logger({
+  stream : accessLog
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(function(err,req,res,next){
+  var meta = '[' + new Date() + ']' + req.url + '\n';
+  errorLog.write(meta + err.stack +'\n');
+  next();
+});
 app.use(sesstion({
   saveUninitialized : false,
   resave : true,
@@ -40,6 +52,12 @@ app.use(sesstion({
   })
 }));
 app.use(flash());
+app.use(multer({
+  dest : './public/images',
+  rename : function(fieldname,filename){
+    return filename;
+  }
+}));
 
 app.use('/', routes);
 app.use('/users', users);

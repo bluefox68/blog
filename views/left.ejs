@@ -4,9 +4,9 @@
 			var html = "";
 			for(var k in nav){
 				if(title==nav[k].text){
-					html += '<li role="presentation" class="active"><a href="'+nav[k].path+'">'+nav[k].text+'</a></li>'
+					html += '<li role="presentation" class="active"><a title="'+nav[k].text+'" href="'+nav[k].path+'">'+nav[k].text+'</a></li>'
 				}else{
-					html += '<li role="presentation"><a href="'+nav[k].path+'">'+nav[k].text+'</a></li>'
+					html += '<li role="presentation"><a title="'+nav[k].text+'" href="'+nav[k].path+'">'+nav[k].text+'</a></li>'
 				}
 			}
 			return html;
@@ -43,6 +43,9 @@
 			},{
 				path:"/loginout",
 				text:'退出'
+			},{
+				path:"/upload",
+				text:'上传'
 			}
 		]
 	}

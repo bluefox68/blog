@@ -151,6 +151,22 @@ router.get('/loginout', function(req, res, next) {
 	res.redirect("/");
 });
 
+router.get('/upload',checkLogin);
+router.get('/upload', function(req, res, next) {
+	res.render('upload', { 
+  	title: '文件上传',
+  	user:req.session.user,
+  	success:req.flash("success").toString(),
+  	error:req.flash("error").toString() 
+  });
+});
+
+router.post('/upload',checkLogin);
+router.post('/upload', function(req, res, next) {
+	req.flash("success","文件上传成功");
+	res.redirect("./upload");
+});
+
 router.get('/u/:name', function(req, res, next) {
 	User.get(req.params.name,function(err,user){
 		if (!user) {
