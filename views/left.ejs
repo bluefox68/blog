@@ -28,6 +28,9 @@
 		common : [{
 			path:"/",
 			text:'首页'
+		},{
+			path:"/links",
+			text:'友情链接'
 		}],
 		unlogin : [{
 				path:"/reg",
@@ -38,19 +41,20 @@
 			}
 		],
 		logined : [{
+				path:"/upload",
+				text:'上传'
+			},{
 				path:"/post",
 				text:'发表'
 			},{
 				path:"/loginout",
 				text:'退出'
-			},{
-				path:"/upload",
-				text:'上传'
 			}
 		]
 	}
 %>
 <ul class="nav nav-pills nav-stacked text-right">
-	<%- Navigation.isActiveNavigation(title,data.common) %>
+	<%- Navigation.isActiveNavigation(title,[data.common[0]]) %>
 	<%- Navigation.render(user,title,data.unlogin,data.logined) %>
+	<%- Navigation.isActiveNavigation(title,[data.common[1]]) %>
 </ul>

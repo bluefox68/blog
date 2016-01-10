@@ -23,7 +23,8 @@ var checkNotLogin = function(req,res,next){//对于不需要登录的页面需�
 
 
 router.get('/', function(req, res, next) {
-	Post.getAll(null,function(err,posts){
+	var page = req.query.p ? parseInt(req.query.p) : 1;
+	Post.getTen(null,page,function(err,posts,total){
 		if (err) {
 			posts = [];
 		};
@@ -32,6 +33,9 @@ router.get('/', function(req, res, next) {
 	  	title : '首页',
 	  	user : req.session.user,
 	  	posts : posts,
+	  	page : page,
+	  	isFirstPage : (page -1) == 0,
+	  	isLastPage : ((page -1)*10 + posts.length) == total,
 	  	success : req.flash("success").toString(),
 	  	error : req.flash("error").toString()
 	  });
@@ -168,23 +172,28 @@ router.post('/upload', function(req, res, next) {
 });
 
 router.get('/u/:name', function(req, res, next) {
+	var page = req.query.p ? parseInt(req.query.p) : 1;
+	
 	User.get(req.params.name,function(err,user){
 		if (!user) {
 			req.flash('error','用户不存在');
 			return res.redirect("/");
 		};
-		Post.getAll(user.name,function(err,posts){
+		Post.getTen(null,page,function(err,posts,total){
 			if (err) {
-				req.flash("error",err);
-				return res.redirect("/");
+				posts = [];
 			};
-			res.render("user",{
-				title : user.name,
-				posts : posts,
-				user : req.session.user,
-				success : req.flash("success").toString(),
-				error : req.flash("error").toString()
-			});
+
+			res.render('index',{
+		  	title : '首页',
+		  	user : req.session.user,
+		  	posts : posts,
+		  	page : page,
+		  	isFirstPage : (page -1) == 0,
+		  	isLastPage : ((page -1)*10 + posts.length) == total,
+		  	success : req.flash("success").toString(),
+		  	error : req.flash("error").toString()
+		  });
 		});
 	});
 });
@@ -223,6 +232,15 @@ router.post('/u/:name/:day/:title', function(req, res, next) {
 		req.flash("sucess","留言成功！");
 		res.redirect("back");
 	});
+});
+
+
+router.get('/links', function(req, res, next) {
+  res.render('links', { 
+  	title: '友情链接',
+  	user:req.session.user,
+  	error:req.flash("error").toString() 
+  });
 });
 
 module.exports = router;
