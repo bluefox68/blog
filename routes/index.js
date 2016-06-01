@@ -103,6 +103,7 @@ router.get('/login', function(req, res, next) {
   	error:req.flash("error").toString() 
   });
 });
+
 router.post('/login', function(req, res, next) {
   var md5 = crypto.createHash("md5"),
 			password = md5.update(req.body.password).digest('hex');
