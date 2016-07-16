@@ -9,6 +9,11 @@
 	  	<% include left %>
 	  </div>
 	  <div class="col-md-10">
+	  	<% if(error){ %>
+	  	<%= error %>
+	  	<% }else{ %>
+	  	<%= success %>
+	  	<%  }  %>
 	  	<form method="post" action="/upload" enctype="multipart/form-data">
 				<input type="file" name="file1" />
 				<input type="file" name="file2" />
