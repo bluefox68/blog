@@ -29,36 +29,42 @@ var checkNotLogin = function(req,res,next){//对于不需要登录的页面需�
 var home = new Home()
 router.get('/',home.get);
 
+//登录
 var login = new Login();
 router.get('/login',checkNotLogin);
 router.get('/login',login.get);
 router.post('/login',login.post);
 
+//退出
 var loginOut = new LoginOut();
 router.get('/loginout',checkLogin);
 router.get('/loginout',loginOut.get);
 
+//注册
 var register = new Register();
 router.get('/reg',checkNotLogin);
 router.get('/reg',register.get);
 router.post('/reg',register.post);
 
+//文章发布
 var post = new Post();
 router.get('/post',checkLogin);
 router.get('/post',post.get);
 router.post('/post',post.post);
 
+//文件上传
 var upload = new Upload();
 router.get('/upload',checkLogin);
 router.get('/upload',upload.get);
-
 router.post('/upload',checkLogin);
 router.post('/upload',upload.post);
 
+//用户评论和留言
 var article = new Article()
 router.get('/u/:name',article.getDefault);
 router.get('/u/:name/:day/:title',article.get);
 router.post('/u/:name/:day/:title',article.post);
+
 
 var links = new Links();
 router.get('/links',links.get);

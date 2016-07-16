@@ -10,7 +10,7 @@ Publish.prototype.get = function(req, res, next) {
 }
 
 Publish.prototype.post = function(req, res, next) {
-	var currentUser = req.session.user.ops[0],
+	var currentUser = req.session.user,
 			post = new Post(currentUser.name,req.body.title,req.body.post);
 
 	post.save(function(err){
