@@ -32,7 +32,5 @@ id name url sort
             "home"
             "lp"
 
-
-
 1.文件上传
 2.所属分类："home"、"lp"

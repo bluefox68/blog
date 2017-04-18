@@ -26,6 +26,7 @@ var checkNotLogin = function(req,res,next){//对于不需要登录的页面需�
 	next();
 }
 
+//主页
 var home = new Home()
 router.get('/',home.get);
 
@@ -59,7 +60,7 @@ router.get('/upload',upload.get);
 router.post('/upload',checkLogin);
 router.post('/upload',upload.post);
 
-//用户评论和留言
+//文章评论和留言
 var article = new Article()
 router.get('/u/:name',article.getDefault);
 router.get('/u/:name/:day/:title',article.get);
